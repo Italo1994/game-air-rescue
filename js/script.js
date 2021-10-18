@@ -11,6 +11,7 @@ function start() {
   var jogo = {};
   var velocidade = 5;
   var posicaoY = parseInt(Math.random() * 334);
+  var podeAtirar = true;
   var TECLA = {
     W: 87,
     S: 83,
@@ -65,6 +66,11 @@ function start() {
         $("#jogador").css("top", topo+10);
       }
     }
+
+    if(jogo.pressionou[TECLA.D]) {
+      // chama a função disparo
+      disparo();
+    }
   } // Fim da função moveJogador
 
   function moveInimigo1() {
@@ -99,5 +105,34 @@ function start() {
       $("#amigo").css("left", 10);
     }
   } // Fim da função moveAmigo
+
+  function disparo() {
+    if(podeAtirar == true) {
+      podeAtirar = false;
+
+      let topo = parseInt( $("#jogador").css("top") );
+      let posicaoX = parseInt( $("#jogador").css("left") );
+      let tiroX = posicaoX + 190;
+      let tiroTopo = topo + 37;
+      $("#fundoGame").append("<div id='disparo'></div>");
+      $("#disparo").css("top", tiroTopo);
+      $("#disparo").css("left", tiroX);
+
+      var tempoDisparo = window.setInterval(executaDisparo, 30);
+    } // Fim da condicional
+
+    function executaDisparo() {
+      let posicaoX = parseInt( $("#disparo").css("left") );
+      $("#disparo").css("left", posicaoX + 15);
+
+      if(posicaoX >= 900) {
+        window.clearInterval(tempoDisparo);
+        tempoDisparo = null;
+        $("#disparo").remove();
+        podeAtirar = true;
+      }
+    } // Fim da função executaDisparo
+
+  } // Fim da função disparo
 
 }
